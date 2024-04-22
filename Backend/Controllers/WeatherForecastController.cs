@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 
-namespace Backend.Controllers;
+namespace DotNet.Docker.Controllers;
 
 [ApiController]
 [Route("[controller]")]

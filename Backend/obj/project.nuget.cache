@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "x+/NxgN+8yzYYHeH4sejRGs9MifgHfy0Dm3FzfRHCB+aJdwo8b79OIcMY0KFTGhQ54ntewBFKyKs4G2l4D6yjQ==",
+  "dgSpecHash": "szTz8Tiv+EaX/Q9nHyR8MKKFZCDFhoeIAL7ilwynU8+96SqpduDwVVwEgZmK2Zdtyk3iW6RmGlU658n/pI9G8w==",
   "success": true,
-  "projectFilePath": "/home/pb/square-booth/Backend/Backend.csproj",
+  "projectFilePath": "/home/pb/square-booth/Backend/DotNet.Docker.csproj",
   "expectedPackageFiles": [
     "/home/pb/.nuget/packages/apimatic.core/0.3.8/apimatic.core.0.3.8.nupkg.sha512",
     "/home/pb/.nuget/packages/azure.core/1.35.0/azure.core.1.35.0.nupkg.sha512",
@@ -82,7 +82,6 @@
     "/home/pb/.nuget/packages/microsoft.entityframeworkcore.abstractions/8.0.4/microsoft.entityframeworkcore.abstractions.8.0.4.nupkg.sha512",
     "/home/pb/.nuget/packages/microsoft.entityframeworkcore.analyzers/8.0.4/microsoft.entityframeworkcore.analyzers.8.0.4.nupkg.sha512",
     "/home/pb/.nuget/packages/microsoft.entityframeworkcore.design/8.0.4/microsoft.entityframeworkcore.design.8.0.4.nupkg.sha512",
-    "/home/pb/.nuget/packages/microsoft.entityframeworkcore.inmemory/8.0.4/microsoft.entityframeworkcore.inmemory.8.0.4.nupkg.sha512",
     "/home/pb/.nuget/packages/microsoft.entityframeworkcore.relational/8.0.4/microsoft.entityframeworkcore.relational.8.0.4.nupkg.sha512",
     "/home/pb/.nuget/packages/microsoft.entityframeworkcore.relational.design/1.1.0/microsoft.entityframeworkcore.relational.design.1.1.0.nupkg.sha512",
     "/home/pb/.nuget/packages/microsoft.entityframeworkcore.sqlserver/8.0.4/microsoft.entityframeworkcore.sqlserver.8.0.4.nupkg.sha512",

@@ -1,0 +1,11 @@
+/home/pb/square-booth/Backend/bin/Release/net8.0/publish/DotNet.Docker
+/home/pb/square-booth/Backend/bin/Release/net8.0/publish/appsettings.Development.json
+/home/pb/square-booth/Backend/bin/Release/net8.0/publish/appsettings.json
+/home/pb/square-booth/Backend/bin/Release/net8.0/publish/DotNet.Docker.dll
+/home/pb/square-booth/Backend/bin/Release/net8.0/publish/DotNet.Docker.deps.json
+/home/pb/square-booth/Backend/bin/Release/net8.0/publish/DotNet.Docker.runtimeconfig.json
+/home/pb/square-booth/Backend/bin/Release/net8.0/publish/DotNet.Docker.pdb
+/home/pb/square-booth/Backend/bin/Release/net8.0/publish/Microsoft.OpenApi.dll
+/home/pb/square-booth/Backend/bin/Release/net8.0/publish/Swashbuckle.AspNetCore.Swagger.dll
+/home/pb/square-booth/Backend/bin/Release/net8.0/publish/Swashbuckle.AspNetCore.SwaggerGen.dll
+/home/pb/square-booth/Backend/bin/Release/net8.0/publish/Swashbuckle.AspNetCore.SwaggerUI.dll

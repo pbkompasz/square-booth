@@ -1,4 +1,4 @@
-namespace Backend;
+namespace DotNet.Docker;
 
 public class WeatherForecast
 {
