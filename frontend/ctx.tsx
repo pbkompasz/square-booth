@@ -1,13 +1,13 @@
-import React from "react";
+import React, { useState } from "react";
 import { useStorageState } from "./components/useStorageState";
 
 const AuthContext = React.createContext<{
-  signIn: () => void;
+  signIn: (role?: "user" | "retail" | "manager" | null) => void;
   signOut: () => void;
   session?: string | null;
   isLoading: boolean;
 }>({
-  signIn: () => null,
+  signIn: (role = null) => null,
   signOut: () => null,
   session: null,
   isLoading: false,
@@ -31,9 +31,9 @@ export function SessionProvider(props: React.PropsWithChildren) {
   return (
     <AuthContext.Provider
       value={{
-        signIn: () => {
+        signIn: (role = null) => {
           // Perform sign-in logic here
-          setSession("xxx");
+          setSession(role);
         },
         signOut: () => {
           setSession(null);
@@ -52,6 +52,8 @@ type Item = {
   name: string;
   price: number;
   quantity: number;
+  storeId?: string;
+  eventId?: string;
 };
 
 type PickUp = {
@@ -68,61 +70,77 @@ type Delivery = {
 };
 
 type Store = {
-  id: string;
-  name: string;
+  id?: string | null;
+  name?: string | null;
   inventory: Item[];
   pickUps: PickUp[];
   deliveries: Delivery[];
 };
 
-const StoreContext = React.createContext<{
+export const StoreContext = React.createContext<{
   fetchStore: (storeId: string) => void;
   fetchInventory: (storeId: string) => void;
   fetchPickUps: (storeId: string, userId: string) => void;
   fetchDeliveries: (storeId: string, userId: string) => void;
-  id?: string | null;
-  name?: string | null;
-  inventory?: Item[];
-  pickUps?: PickUp[];
-  deliveries?: Delivery[];
+  store?: Store;
 }>({
   fetchStore: (storeId: string) => null,
   fetchInventory: (storeId: string) => null,
   fetchPickUps: (storeId: string, userId: string) => null,
   fetchDeliveries: (storeId: string, userId: string) => null,
-  id: null,
-  name: null,
-  inventory: [],
-  pickUps: [],
-  deliveries: [],
+  store: {
+    id: null,
+    name: null,
+    inventory: [],
+    pickUps: [],
+    deliveries: [],
+  },
 });
 
-export function useStore() {
-  const value = React.useContext(StoreContext);
-  if (process.env.NODE_ENV !== "production") {
-    if (!value) {
-      throw new Error("useSession must be wrapped in a <SessionProvider />");
-    }
-  }
-
-  return value;
-}
+const NAMES = {
+  "coffee-shop": "Coffee Shop",
+  vegetables: "Street Food Festival",
+};
 
 export function StoreProvider(props: React.PropsWithChildren) {
-  const [[isLoading, session], setStore] = useStorageState("session");
+  const [store, setStore] = useState<Store>({
+    id: "test",
+    name: "test",
+    inventory: [],
+    pickUps: [],
+    deliveries: [],
+  });
 
   return (
     <StoreContext.Provider
       value={{
         fetchStore: (storeId) => {
+          console.log(storeId);
           // Perform sign-in logic here
-          setSession("xxx");
+          setStore((prevState) => {
+            console.log(prevState);
+            return {
+              ...prevState,
+              id: storeId,
+              name: NAMES[storeId] ?? "name",
+            };
+          });
+
+          // setStore();
         },
-        signOut: () => {
-          setSession(null);
+        fetchInventory: (storeId) => {
+          // Perform sign-in logic here
+          console.log("inventory");
         },
-        session,
-        isLoading,
+        fetchPickUps: (storeId) => {
+          // Perform sign-in logic here
+          console.log("pick-ups");
+        },
+        fetchDeliveries: (storeId) => {
+          // Perform sign-in logic here
+          console.log("deliveries");
+        },
+        store,
       }}
     >
       {props.children}
@@ -130,3 +148,76 @@ export function StoreProvider(props: React.PropsWithChildren) {
   );
 }
 
+export const CartContext = React.createContext<{
+  addItem: (
+    itemId: string,
+    itemName: string,
+    price: number,
+    eventId: string,
+    storeId: string
+  ) => void;
+  makePayment: () => void;
+  cart?: Item[];
+  total: number;
+  paymentStatus: string;
+}>({
+  addItem: (
+    itemId: string,
+    itemName: string,
+    price: number,
+    eventId: string,
+    storeId: string
+  ) => null,
+  makePayment: () => null,
+  cart: [],
+  total: 0,
+  paymentStatus: "inactive",
+});
+
+export function CartProvider(props: React.PropsWithChildren) {
+  const [cart, setCart] = useState<Item[]>([
+    {
+      id: "pizza-slice",
+      name: "Pizza slice",
+      price: 3,
+      quantity: 1,
+      storeId: "Pizza By Alfredo",
+      eventId: "Farmer's Market",
+    },
+  ]);
+  const [total, setTotal] = useState(0);
+  const [paymentStatus, setPaymentStatus] = useState("inactive");
+
+  return (
+    <CartContext.Provider
+      value={{
+        addItem: (
+          itemId: string,
+          itemName: string,
+          price: number,
+          eventId: string,
+          storeId: string
+        ) => {
+          console.log("here");
+          setCart((prev) => [
+            ...prev,
+            {
+              id: itemId,
+              name: itemName,
+              price: price,
+              quantity: 1,
+              storeId,
+              eventId,
+            },
+          ]);
+        },
+        makePayment: () => {},
+        cart,
+        total,
+        paymentStatus,
+      }}
+    >
+      {props.children}
+    </CartContext.Provider>
+  );
+}

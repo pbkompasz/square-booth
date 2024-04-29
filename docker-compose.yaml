@@ -2,42 +2,45 @@ version: '3.8'
 
 services:
   # PostgreSQL database service
-  postgres:
-    image: postgres:latest
-    container_name: postgres_db
+  database:
+    image: postgres
     restart: unless-stopped
     environment:
-      POSTGRES_USER: your_postgres_user
-      POSTGRES_PASSWORD: your_postgres_password
-      POSTGRES_DB: your_database_name
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: yourpassword
+      POSTGRES_DB: BoothDB
     ports:
       - "5432:5432"
     volumes:
-      - postgres_data:/var/lib/postgresql/data
+      - database_data:/var/lib/postgresql/data
 
-  # ASP.NET Core backend service
   backend:
     build:
-      context: ./backend
+      context: ./Backend
       dockerfile: Dockerfile
-    container_name: backend_service
+    container_name: booth-backend
     restart: unless-stopped
     ports:
-      - "5000:5000"
+      - "8080:8080"
     depends_on:
-      - postgres
+      - database
+    # develop:
+    #   watch:
+    #     - action: rebuild
+    #       path: ./Backend
 
-  # React Native frontend service (assuming it needs a Node.js environment)
   frontend:
     build:
       context: ./frontend
       dockerfile: Dockerfile
-    container_name: frontend_service
+    container_name: booth-web
     restart: unless-stopped
     ports:
-      - "3000:3000"
+      - "8081:8081"
     depends_on:
       - backend
+    volumes:
+      - ./frontend/app:/app/app
 
 volumes:
-  postgres_data:
+  database_data:

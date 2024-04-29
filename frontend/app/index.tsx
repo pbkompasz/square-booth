@@ -1,119 +1,153 @@
-import { useState } from "react";
 import {
   View,
   Text,
-  TextInput,
-  Modal,
-  Alert,
+  SafeAreaView,
+  SectionList,
+  StatusBar,
   StyleSheet,
-  Pressable,
+  Image,
 } from "react-native";
-import { Link } from 'expo-router';
+import { Link } from "expo-router";
+import Camera from "@/components/Camera";
 
 type Event = {
-  name: string,
-  id: string,
-}
+  name: string;
+  id: string;
+};
+
+const events = [
+  {
+    title: "Current Events",
+    data: [
+      {
+        id: "farmers-market",
+        name: "Farmer's Market",
+        description: "Local farmer's market",
+        bannerUri:
+          "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSQ3ZVbwUBaf4nq5bqUuETbSWiZXcd4Flyx0pBIRMnaNA&s",
+        timeline: [
+          [0, 8, 17],
+          [1, 8, 17],
+          [2, 8, 17],
+          [3, 8, 17],
+          [4, 8, 17],
+          [5, 8, 17],
+          [6, 10, 16],
+        ],
+        duration: null,
+      },
+    ],
+  },
+  {
+    title: "Upcomming",
+    data: [
+      {
+        id: "street-food-festival",
+        name: "Street Food Festival",
+        description: "Annual Street Food Festival",
+        timeline: [null, null, null, null, null, [5, 10, 22], [6, 10, 22]],
+        bannerUri:
+          "https://streetfoodfestival.ro/wp-content/uploads/2024/04/street-food-festival-cover-fb.jpg",
+        duration: {
+          start: "May 4",
+          end: "May 5",
+        },
+      },
+    ],
+  },
+];
+const DAYS = ["M", "T", "W", "T", "F", "S", "S"];
 
 export default function Index() {
-  const events = [{
-    name: 'Local Farmer\'s Market',
-    id: 'asfdas',
-  }] as Event[];
-  const [prompt, setPrompt] = useState("");
-  const [resultsModalVisible, setResultsModalVisible] = useState(false);
-  const [searchResults, setSearchResults] = useState([]);
-
-  const handleSearch = async (key: string) => {
-    // TODO
-    // setSearchResults(await fetchSearchResults(prompt));
-    if (key !== "Enter") return;
-    setSearchResults([]);
-    setResultsModalVisible(true);
-  };
-
   return (
-    <View style={{ padding: 10 }}>
-      <Text>
-        Events near me:
-        {events.length}
-      </Text>
-      {events.map(event => (
-        <Link key={event.id} href={`/${event.id}`}>{event.name}</Link>
-      ))}
-      <Text>Search for a particular store or item</Text>
-      <TextInput
-        style={{ padding: 10, borderWidth: 1 }}
-        placeholder="Type"
-        onChangeText={(newPrompt) => setPrompt(newPrompt)}
-        onKeyPress={(e) => handleSearch(e.key as string)}
-        defaultValue={prompt}
-      ></TextInput>
-      <Modal
-        animationType="slide"
-        transparent={true}
-        visible={resultsModalVisible}
-        onRequestClose={() => {
-          Alert.alert("Modal has been closed.");
-          setResultsModalVisible(!resultsModalVisible);
-        }}
-      >
-        <View style={styles.centeredView}>
-          <View style={styles.modalView}>
-            <Text>Results: {searchResults.length}</Text>
-            <Pressable
-              style={[styles.button, styles.buttonClose]}
-              onPress={() => setResultsModalVisible(!resultsModalVisible)}
-            >
-              <Text style={styles.textStyle}>Hide Modal</Text>
-            </Pressable>
-          </View>
-        </View>
-      </Modal>
+    <View>
+      <SafeAreaView style={styles.container}>
+        <SectionList
+          sections={events}
+          keyExtractor={(item, index) => item.id + index}
+          renderItem={({ item }) => (
+            <View style={styles.item} onPointerDown={() => console.log("asd")}>
+              <Image
+                style={styles.banner}
+                source={{
+                  uri: item.bannerUri,
+                }}
+              />
+              <Link href={`/${item.id}`}>
+                <Text style={styles.title}>{item.name}</Text>
+              </Link>
+              <Text style={styles.description}>{item.description}</Text>
+              <View
+                style={{
+                  flexDirection: "row",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                  paddingVertical: 5,
+                }}
+              >
+                <View
+                  style={{
+                    flexDirection: "row",
+                    borderRightWidth: 1,
+                  }}
+                >
+                  {Array.from({ length: 7 }).map((_, index) => (
+                    <View
+                      style={{
+                        borderWidth: 1,
+                        borderRightWidth: 0,
+                        paddingVertical: 2,
+                        paddingHorizontal: 10,
+                        width: 32,
+                        backgroundColor: item.timeline[index]
+                          ? "#34d399"
+                          : "white",
+                      }}
+                    >
+                      <Text>{DAYS[index]}</Text>
+                    </View>
+                  ))}
+                </View>
+                {item.duration ? (
+                  <Text>
+                    {item.duration?.start} - {item.duration?.end}
+                  </Text>
+                ) : null}
+              </View>
+            </View>
+          )}
+          renderSectionHeader={({ section: { title } }) => (
+            <Text style={styles.header}>{title}</Text>
+          )}
+        />
+      </SafeAreaView>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  centeredView: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    marginTop: 22,
-  },
-  modalView: {
-    margin: 20,
+  container: {
+    paddingTop: StatusBar.currentHeight,
+    marginHorizontal: 16,
     backgroundColor: "white",
-    borderRadius: 20,
-    padding: 35,
-    alignItems: "center",
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 4,
-    elevation: 5,
   },
-  button: {
-    borderRadius: 20,
-    padding: 10,
-    elevation: 2,
+  item: {
+    borderWidth: 1,
+    paddingHorizontal: 10,
+    cursor: "pointer",
   },
-  buttonOpen: {
-    backgroundColor: "#F194FF",
+  banner: {
+    minWidth: "100%",
+    height: 150,
+    marginTop: 5,
   },
-  buttonClose: {
-    backgroundColor: "#2196F3",
+  header: {
+    fontSize: 32,
+    backgroundColor: "#fff",
+    textDecorationLine: "underline",
+    paddingVertical: 5,
   },
-  textStyle: {
-    color: "white",
-    fontWeight: "bold",
-    textAlign: "center",
-  },
-  modalText: {
-    marginBottom: 15,
-    textAlign: "center",
+  title: {
+    fontSize: 24,
   },
 });
